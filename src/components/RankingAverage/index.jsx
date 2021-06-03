@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   RankingAverageWrapper,
@@ -12,15 +12,55 @@ import { ReactComponent as LightStar } from "../../assets/svgs/lightstar_icon.sv
 import { ReactComponent as HalfStar } from "../../assets/svgs/halfstar_icon.svg";
 
 const RankingAverage = ({ averageRanking, numberOfReviews }) => {
+
+  const [starArray, setsStarArray] = React.useState([]);
+
+  const createStarArray = (average) => {
+    if (average < 0 || average > 5) {
+      // Case wrong average is passed to the component
+      setsStarArray([0, 0, 0, 0, 0]);
+      return;
+    }
+
+    const aux = [];
+    while (average > 0) {
+      if (average - 1 >= 0) {
+        aux.push(1);
+        average -= 1;
+      } else {
+        aux.push(0.5);
+        average = 0;
+      }
+    }
+    while (aux.length !== 5) {
+      aux.push(0);
+    }
+    setsStarArray(aux);
+  };
+
+  useEffect(() => {
+    createStarArray(averageRanking);
+  }, [averageRanking]);
+
   return (
     <RankingAverageWrapper>
-      <StarsWrapper>
-        <DarkStar />
-        <DarkStar />
-        <DarkStar />
-        <HalfStar />
-        <LightStar />
-      </StarsWrapper>
+      {
+        starArray.length > 0 &&
+        <StarsWrapper>
+          {
+            starArray.map(star => {
+              switch (star) {
+                case 1:
+                  return <DarkStar />;
+                case 0.5:
+                  return <HalfStar />;
+                default:
+                  return <LightStar />;
+              }
+            })
+          }
+        </StarsWrapper>
+      }
       <Average>{averageRanking}</Average>
       <NumberOfReviews>({numberOfReviews})</NumberOfReviews>
     </RankingAverageWrapper>

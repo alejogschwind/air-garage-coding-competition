@@ -24,7 +24,7 @@ const ParkingLotCard = () => {
       </TopSection>
       <RatingStats>
         <RankingAverage
-          averageRanking={3.5}
+          averageRanking={5}
           numberOfReviews={17}
         />
       </RatingStats>
