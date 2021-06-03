@@ -16,9 +16,9 @@ import {
   ButtonGroupe
 } from './styles';
 
-const ParkingLotCard = ({ parckingLot }) => {
+const ParkingLotCard = React.forwardRef(({ parckingLot }, ref) => {
   return (
-    <ParkingLotCardWrapper>
+    <ParkingLotCardWrapper ref={ref}>
       <TopSection>
         <Score>{(Math.round(parckingLot.rating * parckingLot.review_count / (parckingLot.review_count + 1) * 100) / 100).toFixed(2)}</Score>
         < Title >{parckingLot.name}</Title>
@@ -31,7 +31,10 @@ const ParkingLotCard = ({ parckingLot }) => {
       </RatingStats>
       <AddressInfo>
         <Label>Address:</Label>
-        <Address>{parckingLot.location.display_address[0]} {parckingLot.location.display_address[1]}</Address>
+        {
+          parckingLot.location &&
+          <Address>{parckingLot.location.display_address[0]} {parckingLot.location.display_address[1]}</Address>
+        }
       </AddressInfo>
       <BottomSection>
         {
@@ -47,6 +50,6 @@ const ParkingLotCard = ({ parckingLot }) => {
       </BottomSection>
     </ParkingLotCardWrapper>
   );
-};
+});
 
 export default ParkingLotCard;

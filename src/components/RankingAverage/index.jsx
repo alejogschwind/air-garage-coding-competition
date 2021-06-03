@@ -48,14 +48,14 @@ const RankingAverage = ({ averageRanking, numberOfReviews }) => {
         starArray.length > 0 &&
         <StarsWrapper>
           {
-            starArray.map(star => {
+            starArray.map((star, index) => {
               switch (star) {
                 case 1:
-                  return <DarkStar />;
+                  return <DarkStar key={index} />;
                 case 0.5:
-                  return <HalfStar />;
+                  return <HalfStar key={index} />;
                 default:
-                  return <LightStar />;
+                  return <LightStar key={index} />;
               }
             })
           }
