@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import './App.css';
 import api from './api';
 import SearchInput from "./components/SearchInput";
+import ParkingLotCard from "./components/ParkingLotCard";
 
 function App() {
   const [data, setData] = useState([]);
@@ -18,6 +19,7 @@ function App() {
   return (
     <div className="App">
       <SearchInput />
+      <ParkingLotCard />
     </div>
   );
 }
