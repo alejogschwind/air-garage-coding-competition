@@ -58,4 +58,13 @@ export const Button = styled.button`
   &:hover {
     border: 2px solid #303030;
   }
+
+  ${props => props.disabled && `
+    background: #888888;
+    cursor: not-allowed;
+
+    &:hover {
+      border: 2px solid transparent;
+    }
+  `}
 `;

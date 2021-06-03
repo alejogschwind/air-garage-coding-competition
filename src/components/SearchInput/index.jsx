@@ -3,20 +3,15 @@ import React from 'react';
 import { ReactComponent as SearchIcon } from "../../assets/svgs/search_icon.svg";
 import { SearchInputWrapper, Input, Button } from './styles';
 
-const SearchInput = ({ ...props }) => {
-
-  const [search, setSearch] = React.useState("");
+const SearchInput = ({ searchLocation, setSearchLocation, fetchParkingLots, ...props }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (search.length > 0) {
-      // Search
-      console.log("Searching...");
-    }
+    fetchParkingLots();
   };
 
   const handleChange = (e) => {
-    setSearch(e.target.value);
+    setSearchLocation(e.target.value);
   };
 
   return (
@@ -25,9 +20,10 @@ const SearchInput = ({ ...props }) => {
         name="search"
         placeholder="Search for a location ..."
         {...props}
+        value={searchLocation}
         onChange={handleChange}
       />
-      <Button>
+      <Button disabled={searchLocation.length <= 0}>
         <SearchIcon />
       </Button>
     </SearchInputWrapper>
