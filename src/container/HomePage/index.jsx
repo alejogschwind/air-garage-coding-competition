@@ -58,6 +58,8 @@ const HomePage = () => {
   const fetchNextPage = async () => {
     // Prevent of fetching a new page if the first page is not loaded.
     if (parkingLots.length <= 0) return;
+    // Prevent of fetching more date if we already fetch the last page.
+    if (parkingLots.length === totalParkingLots) return;
     setLoading(true);
 
     let res = await api.getAllParkingLots({
