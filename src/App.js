@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from "react";
 import './App.css';
 import api from './api';
-import SearchInput from "./components/SearchInput";
-import ParkingLotCard from "./components/ParkingLotCard";
+
+import HomePage from "./container/HomePage";
 
 function App() {
-  const [data, setData] = useState([]);
+  const [totlParkings, setTotalParkings] = useState(0);
+  const [parkings, setParkings] = useState([]);
 
   const fetchParkingLots = async () => {
     let res = await api.getAllParkingLots();
-    setData(res);
+    setParkings(res.data.businesses);
   };
 
   useEffect(() => {
     fetchParkingLots();
   }, []);
 
+  console.log(parkings);
   return (
     <div className="App">
-      <SearchInput />
-      <ParkingLotCard />
+      {
+        parkings.length > 0 &&
+        <HomePage
+          parkingLots={parkings}
+          total={totlParkings}
+        />
+      }
     </div>
   );
 }

@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const ParkingLotCardWrapper = styled.div`
   width: 280px;
+  width: 100%;
   height: 256px;
-  margin: 2rem;
   padding: 1rem;
   background: #fcfcfc;
   border-radius: 8px;
@@ -12,7 +12,6 @@ export const ParkingLotCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  /* align-items: center; */
 `;
 
 export const TopSection = styled.div`
@@ -68,14 +67,17 @@ export const Address = styled.p`
 `;
 
 export const BottomSection = styled.div`
+  height: 80px;
   margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const ImageWrapper = styled.div`
-  width: 45%;
-  height: 80px;
+  width: 60%;
+  height: 100%;
+  margin-right: 1rem;
 
-  
   & > img {
     width: 100%;
     height: 100%;
@@ -85,5 +87,10 @@ export const ImageWrapper = styled.div`
 `;
 
 export const ButtonGroupe = styled.div`
+  width: 100%;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 `;

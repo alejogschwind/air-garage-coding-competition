@@ -30,7 +30,7 @@ export const Input = styled.input`
   }
 
   &:focus {
-    border: 2px solid #bababa;
+    border: 2px solid #b0b0b0;
     background: white;
   }
 

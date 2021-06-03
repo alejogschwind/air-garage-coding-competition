@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../Button';
 import RankingAverage from '../RankingAverage';
 
 import {
@@ -15,30 +16,33 @@ import {
   ButtonGroupe
 } from './styles';
 
-const ParkingLotCard = () => {
+const ParkingLotCard = ({ parckingLot }) => {
   return (
     <ParkingLotCardWrapper>
       <TopSection>
-        <Score>3.31</Score>
-        <Title>Delancey and Essex Municipal Parking Garage</Title>
+        <Score>{(Math.round(parckingLot.rating * parckingLot.review_count / (parckingLot.review_count + 1) * 100) / 100).toFixed(2)}</Score>
+        < Title >{parckingLot.name}</Title>
       </TopSection>
       <RatingStats>
         <RankingAverage
-          averageRanking={5}
-          numberOfReviews={17}
+          averageRanking={parckingLot.rating}
+          numberOfReviews={parckingLot.review_count}
         />
       </RatingStats>
       <AddressInfo>
         <Label>Address:</Label>
-        <Address>107 Essex St Manhattan, NY 10002</Address>
+        <Address>{parckingLot.location.display_address[0]} {parckingLot.location.display_address[1]}</Address>
       </AddressInfo>
       <BottomSection>
-        <ImageWrapper>
-          <img src={"https://s3-media2.fl.yelpcdn.com/bphoto/56BTu1V6_cQDBn68ajAlkA/o.jpg"} alt="asd" />
-        </ImageWrapper>
+        {
+          parckingLot.image_url &&
+          <ImageWrapper>
+            <img src={parckingLot.image_url} alt={parckingLot.name} />
+          </ImageWrapper>
+        }
         <ButtonGroupe>
-          {/* <Button type="secondary">Add to favorite</Button> */}
-          {/* <Button>See it in yeps</Button> */}
+          <Button type="secondary">Add to list</Button>
+          <Button>See it in yeps</Button>
         </ButtonGroupe>
       </BottomSection>
     </ParkingLotCardWrapper>
