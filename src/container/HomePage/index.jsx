@@ -9,6 +9,10 @@ import {
   MainWrapper,
   MapWrapper,
   SearchInputWrapper,
+  FilterSection,
+  SearchInfo,
+  Location,
+  TotalResults,
   ParkingLotsGrid
 } from './styles';
 
@@ -16,8 +20,9 @@ const HomePage = () => {
 
   const [loading, setLoading] = useState(false);
   const [searchLocation, setSearchLocation] = useState("");
-  const [totlParkingLots, setTotalParkingLots] = useState(0);
+  const [totalParkingLots, setTotalParkingLots] = useState(0);
   const [parkingLots, setParkingLots] = useState([]);
+  const [lastSearch, setLastSearch] = useState("");
 
   // TODO: Refactor and clean logic from HomePage
   const observer = React.useRef();
@@ -38,11 +43,12 @@ const HomePage = () => {
   const fetchParkingLots = async () => {
     // Protect from fetching without a location
     if (searchLocation.length <= 0) return;
+    setLastSearch(searchLocation);
     setLoading(true);
 
     let res = await api.getAllParkingLots({
       location: searchLocation,
-      offset: parkingLots.length
+      offset: 0
     });
     setParkingLots(res.data.businesses);
     setTotalParkingLots(res.data.total);
@@ -75,6 +81,19 @@ const HomePage = () => {
             fetchParkingLots={fetchParkingLots}
           />
         </SearchInputWrapper>
+        {
+          parkingLots.length > 0 &&
+          <FilterSection>
+            <SearchInfo>
+              <Location>
+                {lastSearch.toUpperCase()}
+              </Location>
+              <TotalResults>
+                Total Results {totalParkingLots}
+              </TotalResults>
+            </SearchInfo>
+          </FilterSection>
+        }
         <ParkingLotsGrid>
           {
             parkingLots.length > 0 && parkingLots.map((parckingLot, index) => {

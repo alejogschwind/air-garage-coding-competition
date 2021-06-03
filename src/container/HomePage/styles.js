@@ -24,13 +24,36 @@ export const SearchInputWrapper = styled.div`
   align-items: center;
 `;
 
+export const FilterSection = styled.section`
+  margin: 1rem 0;
+  display: flex;
+  background: red;
+`;
+
+export const SearchInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  
+  color: #363636;
+`;
+
+export const Location = styled.h1`
+  font-weight: 500;
+  font-size: 24px;
+  margin-bottom:6px;
+`;
+
+export const TotalResults = styled.span`
+  font-weight: 300;
+  font-size: 16px;
+`;
+
 export const ParkingLotsGrid = styled.div`
   width: 100%;
-  margin: 2rem 0;
   display: grid;
   align-items: center;
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(283px, 1fr));
   grid-template-rows: repeat(2, 256px);
-
 `;
