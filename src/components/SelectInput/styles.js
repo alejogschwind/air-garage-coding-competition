@@ -5,7 +5,7 @@ export const SelectInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: 180px;
+  max-width: 200px;
 `;
 
 export const Label = styled.span`

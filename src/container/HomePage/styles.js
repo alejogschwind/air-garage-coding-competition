@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
 export const HomePageWrapper = styled.div`
-
+  max-width: 100vw;
 `;
 
 export const MapWrapper = styled.div`
   height: 40vh;
+  width: 100%;
   background: #36363617;
   z-index: 0;
 `;

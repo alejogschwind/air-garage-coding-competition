@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import api from '../../api';
 
 import ParkingLotCard from '../../components/ParkingLotCard';
@@ -18,16 +18,60 @@ import {
   ParkingLotsGrid,
   FilterInputs
 } from './styles';
+import { calculateScore } from '../../helper';
 
 const HomePage = () => {
+
+  const options = [
+    {
+      label: "Default",
+      value: "default"
+    },
+    {
+      label: "Average Ranking ↑",
+      value: "ranking-a"
+    },
+    {
+      label: "Average Ranking ↓",
+      value: "ranking-d"
+    },
+    {
+      label: "Number of Reviews ↑",
+      value: "review-a"
+    },
+    {
+      label: "Number of Reviews ↓",
+      value: "review-d"
+    },
+    {
+      label: "Score ↑",
+      value: "score-a"
+    },
+    {
+      label: "Score ↓",
+      value: "score-d"
+    },
+  ];
+
+  const OPTIONS_LIST = [
+    "default",
+    "ranking-a",
+    "ranking-d",
+    "review-a",
+    "review-d",
+    "score-a",
+    "score-d",
+  ];
 
   const [loading, setLoading] = useState(false);
   const [searchLocation, setSearchLocation] = useState("");
   const [totalParkingLots, setTotalParkingLots] = useState(0);
   const [parkingLots, setParkingLots] = useState([]);
+  const [orderedLots, setOrderedLots] = useState([]);
   const [lng, setLng] = useState(-70.9);
   const [lat, setLat] = useState(42.35);
   const [lastSearch, setLastSearch] = useState("");
+  const [orderBy, setOrderBy] = useState("default");
 
   // TODO: Refactor and clean logic from HomePage
   const observer = React.useRef();
@@ -77,24 +121,26 @@ const HomePage = () => {
     setLoading(false);
   };
 
-  const options = [
-    {
-      name: "Default",
-      value: "default"
-    },
-    {
-      name: "Score",
-      value: "score"
-    },
-    {
-      name: "Average Ranking",
-      value: "ranking"
-    },
-    {
-      name: "Number of Reviews",
-      value: "reviews_count"
-    },
-  ];
+  useEffect(() => {
+    setOrderedLots(() => {
+      switch (orderBy) {
+        case OPTIONS_LIST[1]:
+          return orderedLots.concat().sort((a, b) => a.rating - b.rating);
+        case OPTIONS_LIST[2]:
+          return orderedLots.concat().sort((a, b) => b.rating - a.rating);
+        case OPTIONS_LIST[3]:
+          return orderedLots.concat().sort((a, b) => a.review_count - b.review_count);
+        case OPTIONS_LIST[4]:
+          return orderedLots.concat().sort((a, b) => b.review_count - a.review_count);
+        case OPTIONS_LIST[5]:
+          return parkingLots.concat().sort((a, b) => calculateScore(a.rating, a.review_count) - calculateScore(b.rating, b.review_count));
+        case OPTIONS_LIST[6]:
+          return parkingLots.concat().sort((a, b) => calculateScore(b.rating, b.review_count) - calculateScore(a.rating, a.review_count));
+        default:
+          return parkingLots;
+      }
+    });
+  }, [orderBy, parkingLots]);
 
   return (
     <HomePageWrapper>
@@ -102,7 +148,7 @@ const HomePage = () => {
         <Map
           lng={lng}
           lat={lat}
-          parkingLots={parkingLots}
+          parkingLots={orderedLots}
         />
       </MapWrapper>
       <MainWrapper>
@@ -128,14 +174,16 @@ const HomePage = () => {
               <SelectInput
                 label={"Order by"}
                 options={options}
+                orderBy={orderBy}
+                setOrderBy={setOrderBy}
               />
             </FilterInputs>
           </FilterSection>
         }
         <ParkingLotsGrid>
           {
-            parkingLots.length > 0 && parkingLots.map((parckingLot, index) => {
-              if (parkingLots.length === index + 1) {
+            orderedLots.length > 0 && orderedLots.map((parckingLot, index) => {
+              if (orderedLots.length === index + 1) {
                 return (
                   <ParkingLotCard
                     ref={lastCardElement}
@@ -155,7 +203,6 @@ const HomePage = () => {
             )
           }
         </ParkingLotsGrid>
-        {/* <button onClick={fetchNextPage}>Load More</button> */}
       </MainWrapper>
     </HomePageWrapper>
   );
