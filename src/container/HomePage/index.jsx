@@ -4,6 +4,7 @@ import api from '../../api';
 import ParkingLotCard from '../../components/ParkingLotCard';
 import SearchInput from '../../components/SearchInput';
 import SelectInput from '../../components/SelectInput';
+import Map from '../../components/Map';
 
 import {
   HomePageWrapper,
@@ -24,6 +25,8 @@ const HomePage = () => {
   const [searchLocation, setSearchLocation] = useState("");
   const [totalParkingLots, setTotalParkingLots] = useState(0);
   const [parkingLots, setParkingLots] = useState([]);
+  const [lng, setLng] = useState(-70.9);
+  const [lat, setLat] = useState(42.35);
   const [lastSearch, setLastSearch] = useState("");
 
   // TODO: Refactor and clean logic from HomePage
@@ -54,6 +57,8 @@ const HomePage = () => {
     });
     setParkingLots(res.data.businesses);
     setTotalParkingLots(res.data.total);
+    setLng(res.data.region.center.longitude);
+    setLat(res.data.region.center.latitude);
     setLoading(false);
   };
 
@@ -94,7 +99,10 @@ const HomePage = () => {
   return (
     <HomePageWrapper>
       <MapWrapper>
-
+        <Map
+          lng={lng}
+          lat={lat}
+        />
       </MapWrapper>
       <MainWrapper>
         <SearchInputWrapper>

@@ -8,6 +8,7 @@ export const SearchInputWrapper = styled.form`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 `;
 
 export const Input = styled.input`
