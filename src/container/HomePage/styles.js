@@ -25,17 +25,24 @@ export const SearchInputWrapper = styled.div`
 `;
 
 export const FilterSection = styled.section`
+  height: 100%;
   margin: 1rem 0;
   display: flex;
-  background: red;
 `;
 
 export const SearchInfo = styled.div`
+  margin-right: 2rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   
   color: #363636;
+`;
+
+export const FilterInputs = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 `;
 
 export const Location = styled.h1`

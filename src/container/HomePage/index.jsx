@@ -3,6 +3,7 @@ import api from '../../api';
 
 import ParkingLotCard from '../../components/ParkingLotCard';
 import SearchInput from '../../components/SearchInput';
+import SelectInput from '../../components/SelectInput';
 
 import {
   HomePageWrapper,
@@ -13,7 +14,8 @@ import {
   SearchInfo,
   Location,
   TotalResults,
-  ParkingLotsGrid
+  ParkingLotsGrid,
+  FilterInputs
 } from './styles';
 
 const HomePage = () => {
@@ -58,7 +60,7 @@ const HomePage = () => {
   const fetchNextPage = async () => {
     // Prevent of fetching a new page if the first page is not loaded.
     if (parkingLots.length <= 0) return;
-    // Prevent of fetching more date if we already fetch the last page.
+    // Prevent of fetching more date if we are already in the last page.
     if (parkingLots.length === totalParkingLots) return;
     setLoading(true);
 
@@ -69,6 +71,25 @@ const HomePage = () => {
     setParkingLots([...parkingLots, ...res.data.businesses]);
     setLoading(false);
   };
+
+  const options = [
+    {
+      name: "Default",
+      value: "default"
+    },
+    {
+      name: "Score",
+      value: "score"
+    },
+    {
+      name: "Average Ranking",
+      value: "ranking"
+    },
+    {
+      name: "Number of Reviews",
+      value: "reviews_count"
+    },
+  ];
 
   return (
     <HomePageWrapper>
@@ -94,6 +115,12 @@ const HomePage = () => {
                 Total Results {totalParkingLots}
               </TotalResults>
             </SearchInfo>
+            <FilterInputs>
+              <SelectInput
+                label={"Order by"}
+                options={options}
+              />
+            </FilterInputs>
           </FilterSection>
         }
         <ParkingLotsGrid>
