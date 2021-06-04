@@ -7,7 +7,7 @@ import {
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
-const Map = ({ lng, lat }) => {
+const Map = ({ lng, lat, parkingLots }) => {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -35,8 +35,26 @@ const Map = ({ lng, lat }) => {
     });
   }, [lat, lng]);
 
+  useEffect(() => {
+    parkingLots.forEach(parkingLot => {
+
+      const el = document.createElement("div");
+      const el2 = document.createElement("div");
+      const el3 = document.createElement("div");
+
+      el.className = "marker ";
+
+      console.log([parkingLot.coordinates.longitude, parkingLot.coordinates.latitude]);
+      new mapboxgl.Marker(el)
+        .setLngLat([parkingLot.coordinates.longitude, parkingLot.coordinates.latitude])
+        .addTo(map.current);
+    });
+  }, [parkingLots]);
+
   return (
-    <MapWrapper ref={mapContainer} />
+    <MapWrapper ref={mapContainer}>
+
+    </MapWrapper>
   );
 };
 

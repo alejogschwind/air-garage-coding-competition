@@ -7,11 +7,13 @@ export const HomePageWrapper = styled.div`
 export const MapWrapper = styled.div`
   height: 40vh;
   background: #36363617;
+  z-index: 0;
 `;
 
 export const MainWrapper = styled.section`
   width: 90%;
   margin: 0 5%;
+  z-index: 2000;
 `;
 
 export const SearchInputWrapper = styled.div`

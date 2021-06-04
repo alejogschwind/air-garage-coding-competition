@@ -102,6 +102,7 @@ const HomePage = () => {
         <Map
           lng={lng}
           lat={lat}
+          parkingLots={parkingLots}
         />
       </MapWrapper>
       <MainWrapper>

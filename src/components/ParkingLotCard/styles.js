@@ -12,6 +12,7 @@ export const ParkingLotCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+
 `;
 
 export const TopSection = styled.div`
