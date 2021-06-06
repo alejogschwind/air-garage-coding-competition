@@ -19,11 +19,9 @@ import {
   TotalResults,
   ParkingLotsGrid,
   FilterInputs,
-  WelcomeMessage,
-  ErrorMessage
 } from './styles';
 
-import useOrderBy from '../../hooks/useOrderBy';
+// import useOrderBy from '../../hooks/useOrderBy';
 import useFetch from '../../hooks/useFetch';
 import usePagination from '../../hooks/usePagination';
 import Alerts from '../../components/Alerts';
