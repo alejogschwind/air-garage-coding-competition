@@ -17,7 +17,7 @@ const Alerts = ({ data, loading, error, totalItems }) => {
             Hi there!
           </strong>
           <p>
-            You could start by searching for a place.
+            You could start by searching for a location.
           </p>
         </WelcomeMessage>
       }
