@@ -45,7 +45,7 @@ const ParkingLotCard = React.forwardRef(({ parckingLot }, ref) => {
         }
         <ButtonGroupe>
           {/* <Button type="secondary">Add to list</Button> */}
-          <Button>See it in yeps</Button>
+          <Button href={parckingLot.url}>See it in yeps</Button>
         </ButtonGroupe>
       </BottomSection>
     </ParkingLotCardWrapper>

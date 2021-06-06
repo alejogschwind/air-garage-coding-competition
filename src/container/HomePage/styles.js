@@ -98,3 +98,7 @@ export const WelcomeMessage = styled.div`
     font-size: 16px;
   }
 `;
+
+export const ErrorMessage = styled(WelcomeMessage)`
+  background: linear-gradient(90.19deg, #888888 0%, #888888bb 100%);
+`;

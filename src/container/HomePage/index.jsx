@@ -19,7 +19,8 @@ import {
   TotalResults,
   ParkingLotsGrid,
   FilterInputs,
-  WelcomeMessage
+  WelcomeMessage,
+  ErrorMessage
 } from './styles';
 
 import useOrderBy from '../../hooks/useOrderBy';
@@ -173,7 +174,7 @@ const HomePage = () => {
           </ParkingLotsGrid>
         }
         {
-          !loading && totalParkingLots <= 0 &&
+          !loading && !error && totalParkingLots <= 0 &&
           <WelcomeMessage>
             <strong>
               Hi there!
@@ -182,6 +183,13 @@ const HomePage = () => {
               You could start by searching for a place.
               </p>
           </WelcomeMessage>
+        }
+        {
+          error && !loading &&
+          <ErrorMessage>
+            <strong>Ups! Something went wrong</strong>
+            <p>There was an error with ours servers, try again later.</p>
+          </ErrorMessage>
         }
         {
           totalParkingLots > 0 && !loading &&

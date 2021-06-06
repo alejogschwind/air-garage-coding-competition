@@ -11,10 +11,11 @@ const useFetch = ({ request, queryStrings }) => {
     try {
       const res = await request(queryStrings);
       setData(res.data);
-      setLoading(false);
     } catch (err) {
+      console.log(err);
       setError(err);
     }
+    setLoading(false);
   };
 
   // let res = await api.getAllParkingLots({
