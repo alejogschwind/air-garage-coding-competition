@@ -61,9 +61,37 @@ export const TotalResults = styled.span`
 
 export const ParkingLotsGrid = styled.div`
   width: 100%;
+  height: fit-content;
   display: grid;
   align-items: center;
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(283px, 1fr));
   grid-template-rows: repeat(2, 256px);
+`;
+
+export const WelcomeMessage = styled.div`
+  width: 100%;
+  height: 8rem;
+  max-width: 512px;
+  padding: 2rem;
+  margin: 2rem auto;
+  background: linear-gradient(90.19deg, #363636 0%, rgba(54, 54, 54, 0.9) 100%);
+  border-radius: 8px;
+  color: #fcfcfc;
+  font-size: 20px;
+  font-weight: 300;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & > strong, p {
+    width: 100%;
+  }
+
+  & > p {
+    margin: 0.2rem 0;
+    font-size: 16px;
+  }
 `;

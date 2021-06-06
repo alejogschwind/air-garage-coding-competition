@@ -12,6 +12,7 @@ const Map = ({ lng, lat, parkingLots }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [zoom, setZoom] = useState(9);
+  const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
@@ -36,6 +37,12 @@ const Map = ({ lng, lat, parkingLots }) => {
   }, [lat, lng]);
 
   useEffect(() => {
+    // Clean markers before add new marker
+    markers.forEach(marker => {
+      marker.remove();
+    });
+
+    let aux = [];
     parkingLots.forEach(parkingLot => {
 
       const el = document.createElement("div");
@@ -45,10 +52,13 @@ const Map = ({ lng, lat, parkingLots }) => {
       el.className = "marker ";
 
       console.log([parkingLot.coordinates.longitude, parkingLot.coordinates.latitude]);
-      new mapboxgl.Marker(el)
+      let marker = new mapboxgl.Marker(el)
         .setLngLat([parkingLot.coordinates.longitude, parkingLot.coordinates.latitude])
         .addTo(map.current);
+      // Save markers to clean up the map later
+      aux.push(marker);
     });
+    setMarkers(aux);
   }, [parkingLots]);
 
   return (

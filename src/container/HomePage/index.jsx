@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import api from '../../api';
 
 import ParkingLotCard from '../../components/ParkingLotCard';
@@ -16,45 +16,33 @@ import {
   Location,
   TotalResults,
   ParkingLotsGrid,
-  FilterInputs
+  FilterInputs,
+  WelcomeMessage
 } from './styles';
 import useOrderBy from '../../hooks/useOrderBy';
 import useFetch from '../../hooks/useFetch';
+import Pagination from '../../components/Pagination';
+import usePagination from '../../hooks/usePagination';
 
 const HomePage = () => {
 
   // Consts
   const OPTIONS = [
     {
-      label: "Default",
-      value: "default"
+      label: "Best Match",
+      value: "best_match"
     },
     {
-      label: "Average Ranking ↑",
-      value: "ranking-a"
+      label: "Rating",
+      value: "rating"
     },
     {
-      label: "Average Ranking ↓",
-      value: "ranking-d"
-    },
-    {
-      label: "Number of Reviews ↑",
-      value: "review-a"
-    },
-    {
-      label: "Number of Reviews ↓",
-      value: "review-d"
-    },
-    {
-      label: "Score ↑",
-      value: "score-a"
-    },
-    {
-      label: "Score ↓",
-      value: "score-d"
-    },
+      label: "Number of Reviews",
+      value: "review_count"
+    }
   ];
   const OPTIONS_VALUES = OPTIONS.map(option => option.value);
+  const numOfItemsPerPage = 20;
 
   // States
   const [searchLocation, setSearchLocation] = useState("");
@@ -62,20 +50,34 @@ const HomePage = () => {
   const [parkingLots, setParkingLots] = useState([]);
   const [[lng, lat], setCoordinates] = useState([-122.4364, 37.7608]);
   const [lastSearch, setLastSearch] = useState("");
+  const [orderBy, setOrderBy] = useState(OPTIONS_VALUES[0]);
+  const [offset, setOffset] = useState(0);
+
+  // TODO: In the first place, tried to order the items on the frontend. But next reliced that, i am 
+  // only sorting the elements on one page and not in all the collection.
+  // And the API is limited to request 50 per page, so i am limited to the sorting options that the API
+  // provides. (That means i could not sort by score, al menos que cree mi propia API.)
+
+  // Order By Feature
+  // const { orderedLots, orderBy, setOrderBy } = useOrderBy({
+  //   parkingLots,
+  //   options: OPTIONS_VALUES
+  // });
+
+  // Pagination Feature
+  const { currentPage, lastPage, setCurrentPage } = usePagination({
+    totalItems: totalParkingLots,
+    numOfItemsPerPage
+  });
 
   // Fetching Data
   const { loading, error, data, fetchData } = useFetch({
     request: api.getAllParkingLots,
     queryStrings: {
       location: searchLocation,
-      offset: 0
+      offset,
+      sort_by: orderBy
     }
-  });
-
-  // Order By Feature
-  const { orderedLots, orderBy, setOrderBy } = useOrderBy({
-    parkingLots,
-    options: OPTIONS_VALUES
   });
 
   // Setting States
@@ -85,6 +87,26 @@ const HomePage = () => {
     setTotalParkingLots(data.total);
     setCoordinates([data.region.center.longitude, data.region.center.latitude]);
   }, [data]);
+
+  useEffect(() => {
+    if (!data) return;
+    fetchData();
+  }, [orderBy, offset]);
+
+  const firstUpdate = useRef(true);
+  useEffect(() => {
+    // We dont want to run it in the first render.
+    window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+    if (firstUpdate.current) return;
+    setOffset((currentPage - 1) * numOfItemsPerPage);
+  }, [currentPage]);
+
+  useLayoutEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+  });
 
   // TODO: Refactor and clean logic from HomePage
   // const observer = React.useRef();
@@ -103,20 +125,10 @@ const HomePage = () => {
   // }, [loading]);
 
 
-  // const fetchNextPage = async () => {
-  //   // Prevent of fetching a new page if the first page is not loaded.
-  //   if (parkingLots.length <= 0) return;
-  //   // Prevent of fetching more date if we are already in the last page.
-  //   if (parkingLots.length === totalParkingLots) return;
-  //   setLoading(true);
-
-  //   let res = await api.getAllParkingLots({
-  //     location: searchLocation,
-  //     offset: parkingLots.length
-  //   });
-  //   setParkingLots([...parkingLots, ...res.data.businesses]);
-  //   setLoading(false);
-  // };
+  const newSearchReset = async () => {
+    setOffset(0);
+    setCurrentPage(1);
+  };
 
   return (
     <HomePageWrapper>
@@ -124,7 +136,7 @@ const HomePage = () => {
         <Map
           lng={lng}
           lat={lat}
-          parkingLots={orderedLots}
+          parkingLots={parkingLots}
         />
       </MapWrapper>
       <MainWrapper>
@@ -133,7 +145,8 @@ const HomePage = () => {
             searchLocation={searchLocation}
             setSearchLocation={setSearchLocation}
             setLastSearch={setLastSearch}
-            fetchParkingLots={fetchData}
+            newSearchReset={newSearchReset}
+            fetchData={fetchData}
           />
         </SearchInputWrapper>
         {
@@ -157,16 +170,35 @@ const HomePage = () => {
             </FilterInputs>
           </FilterSection>
         }
-        <ParkingLotsGrid>
-          {
-            orderedLots.length > 0 && orderedLots.map((parckingLot, index) => (
-              <ParkingLotCard
-                key={parckingLot.id}
-                parckingLot={parckingLot}
-              />
-            ))
-          }
-        </ParkingLotsGrid>
+        {
+          totalParkingLots > 0 ?
+            <ParkingLotsGrid>
+              {
+                parkingLots.map((parckingLot, index) => (
+                  <ParkingLotCard
+                    key={parckingLot.id}
+                    parckingLot={parckingLot}
+                  />
+                ))
+              }
+            </ParkingLotsGrid> :
+            <WelcomeMessage>
+              <strong>
+                Hi there!
+              </strong>
+              <p>
+                You could start by searching for a place.
+              </p>
+            </WelcomeMessage>
+        }
+        {
+          totalParkingLots > 0 &&
+          <Pagination
+            currentPage={currentPage}
+            lastPage={lastPage}
+            setCurrentPage={setCurrentPage}
+          />
+        }
       </MainWrapper>
     </HomePageWrapper>
   );

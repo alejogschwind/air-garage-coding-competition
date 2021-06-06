@@ -3,14 +3,15 @@ import React from 'react';
 import { ReactComponent as SearchIcon } from "../../assets/svgs/search_icon.svg";
 import { SearchInputWrapper, Input, Button } from './styles';
 
-const SearchInput = ({ searchLocation, setSearchLocation, setLastSearch, fetchParkingLots, ...props }) => {
+const SearchInput = ({ searchLocation, setSearchLocation, setLastSearch, fetchData, newSearchReset, ...props }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Protect from searching without an input
     if (searchLocation.length <= 0) return;
+    newSearchReset();
     setLastSearch(searchLocation);
-    fetchParkingLots();
+    fetchData();
   };
 
   const handleChange = (e) => {
