@@ -5,6 +5,8 @@ import ParkingLotCard from '../../components/ParkingLotCard';
 import SearchInput from '../../components/SearchInput';
 import SelectInput from '../../components/SelectInput';
 import Map from '../../components/Map';
+import Pagination from '../../components/Pagination';
+import Loading from '../../components/Loading';
 
 import {
   HomePageWrapper,
@@ -19,9 +21,9 @@ import {
   FilterInputs,
   WelcomeMessage
 } from './styles';
+
 import useOrderBy from '../../hooks/useOrderBy';
 import useFetch from '../../hooks/useFetch';
-import Pagination from '../../components/Pagination';
 import usePagination from '../../hooks/usePagination';
 
 const HomePage = () => {
@@ -108,23 +110,6 @@ const HomePage = () => {
     }
   });
 
-  // TODO: Refactor and clean logic from HomePage
-  // const observer = React.useRef();
-  // const lastCardElement = React.useCallback(node => {
-  //   console.log(node);
-  //   console.log(loading);
-  //   if (loading) return;
-  //   if (observer.current) observer.current.disconnect();
-  //   observer.current = new IntersectionObserver(entries => {
-  //     if (entries[0].isIntersecting) {
-  //       // The last card it is visible. Fetch more data.
-  //       fetchNextPage();
-  //     }
-  //   });
-  //   if (node) observer.current.observe(node);
-  // }, [loading]);
-
-
   const newSearchReset = async () => {
     setOffset(0);
     setCurrentPage(1);
@@ -150,7 +135,11 @@ const HomePage = () => {
           />
         </SearchInputWrapper>
         {
-          parkingLots.length > 0 &&
+          loading &&
+          <Loading />
+        }
+        {
+          totalParkingLots > 0 && !loading &&
           <FilterSection>
             <SearchInfo>
               <Location>
@@ -171,28 +160,31 @@ const HomePage = () => {
           </FilterSection>
         }
         {
-          totalParkingLots > 0 ?
-            <ParkingLotsGrid>
-              {
-                parkingLots.map((parckingLot, index) => (
-                  <ParkingLotCard
-                    key={parckingLot.id}
-                    parckingLot={parckingLot}
-                  />
-                ))
-              }
-            </ParkingLotsGrid> :
-            <WelcomeMessage>
-              <strong>
-                Hi there!
-              </strong>
-              <p>
-                You could start by searching for a place.
-              </p>
-            </WelcomeMessage>
+          totalParkingLots > 0 && !loading &&
+          <ParkingLotsGrid>
+            {
+              parkingLots.map((parckingLot, index) => (
+                <ParkingLotCard
+                  key={parckingLot.id}
+                  parckingLot={parckingLot}
+                />
+              ))
+            }
+          </ParkingLotsGrid>
         }
         {
-          totalParkingLots > 0 &&
+          !loading && totalParkingLots <= 0 &&
+          <WelcomeMessage>
+            <strong>
+              Hi there!
+              </strong>
+            <p>
+              You could start by searching for a place.
+              </p>
+          </WelcomeMessage>
+        }
+        {
+          totalParkingLots > 0 && !loading &&
           <Pagination
             currentPage={currentPage}
             lastPage={lastPage}

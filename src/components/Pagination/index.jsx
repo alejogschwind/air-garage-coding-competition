@@ -69,9 +69,10 @@ const Pagination = ({ currentPage, lastPage, setCurrentPage }) => {
         <LeftArrowIcon />
       </Button>
       {
-        pages.map(page => {
+        pages.map((page, index) => {
           return (
             <Button
+              key={index}
               active={currentPage === page}
               clickable={currentPage !== page}
               onClick={() => setCurrentPage(page)}

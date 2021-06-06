@@ -7,7 +7,7 @@ import {
   Option
 } from './styles';
 
-const SelectInput = ({ label, options, setOrderBy }) => {
+const SelectInput = ({ label, options, orderBy, setOrderBy }) => {
 
   const handleSelect = (e) => {
     setOrderBy(e.target.value);
@@ -16,7 +16,7 @@ const SelectInput = ({ label, options, setOrderBy }) => {
   return (
     <SelectInputWrapper>
       <Label>{label}</Label>
-      <Select onChange={handleSelect}>
+      <Select onChange={handleSelect} defaultValue={orderBy}>
         {
           options.map((option, index) => (
             <Option

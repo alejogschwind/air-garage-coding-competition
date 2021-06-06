@@ -44,7 +44,7 @@ const ParkingLotCard = React.forwardRef(({ parckingLot }, ref) => {
           </ImageWrapper>
         }
         <ButtonGroupe>
-          <Button type="secondary">Add to list</Button>
+          {/* <Button type="secondary">Add to list</Button> */}
           <Button>See it in yeps</Button>
         </ButtonGroupe>
       </BottomSection>

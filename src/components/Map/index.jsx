@@ -9,9 +9,9 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const Map = ({ lng, lat, parkingLots }) => {
 
+  const zoom = 9;
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [zoom, setZoom] = useState(9);
   const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
@@ -46,12 +46,9 @@ const Map = ({ lng, lat, parkingLots }) => {
     parkingLots.forEach(parkingLot => {
 
       const el = document.createElement("div");
-      const el2 = document.createElement("div");
-      const el3 = document.createElement("div");
 
       el.className = "marker ";
 
-      console.log([parkingLot.coordinates.longitude, parkingLot.coordinates.latitude]);
       let marker = new mapboxgl.Marker(el)
         .setLngLat([parkingLot.coordinates.longitude, parkingLot.coordinates.latitude])
         .addTo(map.current);
