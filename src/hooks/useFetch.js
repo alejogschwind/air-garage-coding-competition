@@ -7,6 +7,7 @@ const useFetch = ({ request, queryStrings }) => {
   const [data, setData] = useState(null);
 
   const fetchData = async () => {
+    setData(null);
     setError(null);
     setLoading(true);
     try {

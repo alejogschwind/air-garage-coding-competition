@@ -26,6 +26,7 @@ import {
 import useOrderBy from '../../hooks/useOrderBy';
 import useFetch from '../../hooks/useFetch';
 import usePagination from '../../hooks/usePagination';
+import Alerts from '../../components/Alerts';
 
 const HomePage = () => {
 
@@ -85,7 +86,12 @@ const HomePage = () => {
 
   // Setting States
   useEffect(() => {
-    if (!data) return;
+    if (!data) {
+      // If not data, reset default values.
+      setParkingLots([]);
+      setTotalParkingLots(0);
+      return;
+    };
     setParkingLots(data.businesses);
     setTotalParkingLots(data.total);
     setCoordinates([data.region.center.longitude, data.region.center.latitude]);
@@ -173,24 +179,12 @@ const HomePage = () => {
             }
           </ParkingLotsGrid>
         }
-        {
-          !loading && !error && totalParkingLots <= 0 &&
-          <WelcomeMessage>
-            <strong>
-              Hi there!
-              </strong>
-            <p>
-              You could start by searching for a place.
-              </p>
-          </WelcomeMessage>
-        }
-        {
-          error && !loading &&
-          <ErrorMessage>
-            <strong>Ups! Something went wrong</strong>
-            <p>There was an error with ours servers, try again later.</p>
-          </ErrorMessage>
-        }
+        <Alerts
+          data={data}
+          loading={loading}
+          error={error}
+          totalItems={totalParkingLots}
+        />
         {
           totalParkingLots > 0 && !loading &&
           <Pagination

@@ -6,6 +6,10 @@ export const SelectInputWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   max-width: 200px;
+
+  @media only screen and (max-width: 420px) {
+    max-width: 100%;
+  }
 `;
 
 export const Label = styled.span`
